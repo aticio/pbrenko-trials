@@ -9,7 +9,7 @@ def test_serialize_domain_brick():
         type="up",
         open=100,
         close=200,
-        low=10,
+        low=None,
         high=230,
     )
 
@@ -18,7 +18,7 @@ def test_serialize_domain_brick():
             "type": "up",
             "open": 100,
             "close": 200,
-            "low": 10,
+            "low": null,
             "high": 230
         }
     '''
