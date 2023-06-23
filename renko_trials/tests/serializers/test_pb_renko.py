@@ -71,7 +71,7 @@ def test_serialize_domain_pb_renko():
     )
 
     pb_renko = PBRenko(
-        bricks=[brick_1],
+        bricks=[brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8],
         percent=10,
         number_of_leaks=5,
     )
@@ -85,6 +85,55 @@ def test_serialize_domain_pb_renko():
                     "close": 110,
                     "high": 110,
                     "low": 100
+                },
+                {
+                    "type": "up",
+                    "open": 110,
+                    "close": 121,
+                    "high": 125,
+                    "low": 110
+                },
+                {
+                    "type": "up",
+                    "open": 121,
+                    "close": 133.1,
+                    "high": 133.1,
+                    "low": 121
+                },
+                {
+                    "type": "up",
+                    "open": 133.1,
+                    "close": 146.1,
+                    "high": 150,
+                    "low": 133.1
+                },
+                {
+                    "type": "down",
+                    "open": 131.769,
+                    "close": 118.5921,
+                    "high": 140,
+                    "low": 118.5921
+                },
+                {
+                    "type": "down",
+                    "open": 118.5921,
+                    "close": 106.73289,
+                    "high": 118.5921,
+                    "low": 105
+                },
+                {
+                    "type": "up",
+                    "open": 117.406179,
+                    "close": 129.1467969,
+                    "high": 135,
+                    "low": 117.406179
+                },
+                {
+                    "type": "up",
+                    "open": 129.1467969,
+                    "close": 142.06147659,
+                    "high": 145,
+                    "low": 129.1467969
                 }
             ],
             "percent": 10,
