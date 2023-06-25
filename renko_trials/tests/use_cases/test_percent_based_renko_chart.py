@@ -12,11 +12,12 @@ def market_data():
 
 
 def test_create_percent_based_renko_chart(market_data):
+    symbol = "BTCUSDT"
     percent = 10
     repo = mock.Mock()
     repo.get_data.return_value = market_data
 
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo, percent)
+    pb_renko_create_use_case = PBRenkoCreateUseCase(repo, symbol, percent)
     result = pb_renko_create_use_case.create_pbrenko()
 
     brick_0 = Brick(
@@ -94,6 +95,7 @@ def test_create_percent_based_renko_chart(market_data):
     bricks = [brick_0, brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8]
 
     pb_renko = PBRenko(
+        symbol=symbol,
         bricks=bricks,
         percent=percent,
         number_of_leaks=0,

@@ -6,6 +6,7 @@ class PBRenkoJsonEncoder(json.JSONEncoder):
     def default(self, o):
         try:
             to_serialize = {
+                "symbol": o.symbol,
                 "bricks": [Brick.to_dict(y) for y in o.bricks],
                 "percent": o.percent,
                 "number_of_leaks": o.number_of_leaks,

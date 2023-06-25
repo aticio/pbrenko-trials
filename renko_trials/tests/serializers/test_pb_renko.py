@@ -71,6 +71,7 @@ def test_serialize_domain_pb_renko():
     )
 
     pb_renko = PBRenko(
+        symbol="BTCUSDT",
         bricks=[brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8],
         percent=10,
         number_of_leaks=5,
@@ -78,6 +79,7 @@ def test_serialize_domain_pb_renko():
 
     expected_json = '''
         {
+            "symbol": "BTCUSDT",
             "bricks": [
                 {
                     "type": "up",

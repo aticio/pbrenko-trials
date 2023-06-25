@@ -68,14 +68,16 @@ def test_pb_renko_model_init():
     )
 
     pb_renko = PBRenko(
+        symbol="BTCUSDT",
         bricks=[brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8],
         percent=10,
-        number_of_leaks=5,
+        number_of_leaks=0,
     )
 
+    assert pb_renko.symbol == "BTCUSDT"
     assert pb_renko.bricks == [brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8]
     assert pb_renko.percent == 10
-    assert pb_renko.number_of_leaks == 5
+    assert pb_renko.number_of_leaks == 0
 
 
 def test_pb_renko_model_from_dict():
@@ -146,6 +148,7 @@ def test_pb_renko_model_from_dict():
     bricks = [brick_1, brick_2, brick_3, brick_4, brick_5, brick_6, brick_7, brick_8]
 
     init_dict = {
+        "symbol": "BTCUSDT",
         "bricks": [
             {
                 "type": "up",
@@ -217,6 +220,7 @@ def test_pb_renko_model_from_dict():
 
 def test_pb_renko_model_to_dict():
     init_dict = {
+        "symbol": "BTCUSDT",
         "bricks": [
             {
                 "type": "up",
