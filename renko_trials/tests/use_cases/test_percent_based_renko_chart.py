@@ -17,8 +17,8 @@ def test_create_percent_based_renko_chart(market_data):
     repo = mock.Mock()
     repo.get_data.return_value = market_data
 
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo, symbol, percent)
-    result = pb_renko_create_use_case.create_pbrenko()
+    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
+    result = pb_renko_create_use_case.create_pbrenko(symbol, percent)
 
     brick_0 = Brick(
         type="first",

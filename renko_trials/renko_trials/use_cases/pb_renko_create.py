@@ -4,19 +4,19 @@ from renko_trials.domain.brick import Brick
 from renko_trials.domain.pb_renko import PBRenko
 
 class PBRenkoCreateUseCase:
-    def __init__(self, repo, symbol, percent):
-        self.symbol = symbol
-        self.percent = percent
+    def __init__(self, repo):
         self.data = repo.get_data()
         self.bricks = []
         self.low_wick = 0
         self.high_wick = 0
         self.number_of_leaks = 0
     
-    def create_pbrenko(self):
+    def create_pbrenko(self, symbol, percent):
         if len(self.data) == 0:
             return []
 
+        self.symbol = symbol
+        self.percent = percent
         gap = float(self.data[0]) * self.percent / 100
 
         for i, d in enumerate(self.data):

@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint, Response
+from flask import Blueprint, request, Response
 
 from renko_trials.repository.memrepo import MemRepo
 from renko_trials.use_cases.pb_renko_create import PBRenkoCreateUseCase
@@ -15,8 +15,8 @@ market_data = [42373.73, 42217.87, 42053.66, 42535.94, 44544.86, 43873.56, 40515
 @blueprint.route("/pb_renko_create", methods=["GET"])
 def pb_renko_create():
     repo = MemRepo(market_data)
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo, "BTCUSDT", 6.3)
-    pb_renko = pb_renko_create_use_case.create_pbrenko()
+    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
+    pb_renko = pb_renko_create_use_case.create_pbrenko(request.args.get("symbol"), float(request.args.get("percent")))
 
     return Response(
         json.dumps(pb_renko, cls=PBRenkoJsonEncoder),

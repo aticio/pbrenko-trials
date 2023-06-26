@@ -5,8 +5,8 @@ from decimal import Decimal, getcontext
 def find_optimum_percent(repo, symbol):
     found_percentages = []
     for i in (x / 10 for x in range(9, 101)):
-        pb_renko_create_use_case = PBRenkoCreateUseCase(repo, symbol, i)
-        pb_renko = pb_renko_create_use_case.create_pbrenko()
+        pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
+        pb_renko = pb_renko_create_use_case.create_pbrenko(symbol, i)
 
         if pb_renko.number_of_leaks == 0:
             found_percentages.append(i)
