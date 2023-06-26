@@ -14,6 +14,9 @@ class PBRenkoCreateUseCase:
         self.number_of_leaks = 0
     
     def create_pbrenko(self):
+        if len(self.data) == 0:
+            return []
+
         gap = float(self.data[0]) * self.percent / 100
 
         for i, d in enumerate(self.data):
