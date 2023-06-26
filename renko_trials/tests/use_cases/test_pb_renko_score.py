@@ -1,4 +1,3 @@
-from renko_trials.domain.pb_renko import PBRenko
 from renko_trials.domain.brick import Brick
 from renko_trials.use_cases.pb_renko_score import pb_renko_score
 
