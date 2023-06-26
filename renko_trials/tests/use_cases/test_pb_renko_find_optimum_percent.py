@@ -2,6 +2,7 @@ import pytest
 
 from unittest import mock
 from renko_trials.use_cases.pb_renko_find_optimum_percent import find_optimum_percent
+from renko_trials.use_cases.pb_renko_create import PBRenkoCreateUseCase
 
 
 @pytest.fixture
