@@ -28,13 +28,15 @@ def build_pb_renko_create_request(parameters=None):
     invalid_req = PBRenkoCreateInvalidRequest()
 
     if parameters is not None:
-        if not isinstance(parameters, Mapping):
+        if not isinstance(parameters, dict):
             invalid_req.add_error("parameters", "Is not iterable")
             return invalid_req
 
-        for key, value in parameters.items():
-            if key not in accepted_parameters:
-                invalid_req.add_error("parameters", "Key {} cannot be used".format(key))
+        if len(parameters) != 3:
+            invalid_req.add_error("parameters", "Wrong number of parameters")
+            for key, value in parameters.items():
+                if key not in accepted_parameters:
+                    invalid_req.add_error("parameters", "Key {} cannot be used".format(key))
 
         if invalid_req.has_errors():
             return invalid_req
