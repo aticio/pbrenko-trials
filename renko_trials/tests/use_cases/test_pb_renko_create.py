@@ -4,6 +4,7 @@ from unittest import mock
 from renko_trials.domain.brick import Brick
 from renko_trials.domain.pb_renko import PBRenko
 from renko_trials.use_cases.pb_renko_create import PBRenkoCreateUseCase
+from renko_trials.requests.pb_renko_create import build_pb_renko_create_request
 
 
 @pytest.fixture
@@ -11,14 +12,16 @@ def market_data():
     return [100, 110, 125, 130, 150, 140, 120, 110, 105, 115, 135, 145]
 
 
-def test_create_percent_based_renko_chart(market_data):
+def test_pb_renko_create(market_data):
     symbol = "BTCUSDT"
     percent = 10
     repo = mock.Mock()
     repo.get_data.return_value = market_data
 
+    request = build_pb_renko_create_request({"symbol": "BTCUSDT", "percent": 6.3, "repo": "crypto"})
+
     pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-    result = pb_renko_create_use_case.create_pbrenko(symbol, percent)
+    response = pb_renko_create_use_case.create_pbrenko(request)
 
     brick_0 = Brick(
         type="first",
@@ -101,5 +104,6 @@ def test_create_percent_based_renko_chart(market_data):
         number_of_leaks=0,
     )
 
+    assert bool(response) is True
     repo.get_data.assert_called_with()
-    assert result == pb_renko
+    assert response.value == pb_renko

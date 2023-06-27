@@ -1,4 +1,5 @@
 from renko_trials.use_cases.pb_renko_create import PBRenkoCreateUseCase
+from renko_trials.requests.pb_renko_create import build_pb_renko_create_request
 from decimal import Decimal, getcontext
 
 
@@ -6,7 +7,8 @@ def find_optimum_percent(repo, symbol):
     found_percentages = []
     for i in (x / 10 for x in range(9, 101)):
         pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-        pb_renko = pb_renko_create_use_case.create_pbrenko(symbol, i)
+        request = build_pb_renko_create_request({"symbol": symbol, "percent": i, "repo": "crypto"})
+        pb_renko = pb_renko_create_use_case.create_pbrenko(request)
 
         if pb_renko.number_of_leaks == 0:
             found_percentages.append(i)
