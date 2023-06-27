@@ -2,6 +2,13 @@
 import math
 from renko_trials.domain.brick import Brick
 from renko_trials.domain.pb_renko import PBRenko
+from renko_trials.responses import (
+    ResponseSuccess,
+    ResponseFailure,
+    ResponseTypes,
+    build_response_from_invalid_request,
+)
+
 
 class PBRenkoCreateUseCase:
     def __init__(self, repo):
@@ -12,97 +19,103 @@ class PBRenkoCreateUseCase:
         self.number_of_leaks = 0
     
     def create_pbrenko(self, request):
-        if len(self.data) == 0:
-            return []
+        if not request:
+            return build_response_from_invalid_request(request)
+        
+        try:
+            if len(self.data) == 0:
+                return []
 
-        self.symbol = request.parameters["symbol"]
-        self.percent = request.parameters["percent"]
-        gap = float(self.data[0]) * self.percent / 100
+            self.symbol = request.parameters["symbol"]
+            self.percent = request.parameters["percent"]
+            gap = float(self.data[0]) * self.percent / 100
 
-        for i, d in enumerate(self.data):
-            if i == 0:
-                if len(self.bricks) == 0:
-                    self.bricks.append(Brick(type="first", open=float(d), close=float(d), high=float(d), low=float(d)))
-            else:
-                if self.bricks[-1].type == "up":
-                    if d > self.bricks[-1].close:
-                        delta = d - self.bricks[-1].close
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            if self.low_wick == 0:
-                                self.add_bricks("up", fcount, gap)
-                            else:
-                                self.add_bricks("up", fcount, gap, self.low_wick)
-                            gap = d * self.percent / 100
-                            self.low_wick = 0
-                            self.high_wick = 0
-                        else:
-                            if d > self.high_wick:
-                                self.high_wick = d
-                    elif d < self.bricks[-1].open:
-                        delta = self.bricks[-1].open - d
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            if self.high_wick == 0:
-                                self.add_bricks("down", fcount, gap)
-                            else:
-                                self.add_bricks("down", fcount, gap, self.high_wick)
-                            gap = d * self.percent / 100
-                            self.high_wick = 0
-                            self.low_wick = 0
-                        else:
-                            if self.low_wick == 0 or d < self.low_wick:
-                                self.low_wick = d
-                elif self.bricks[-1].type == "down":
-                    if d < self.bricks[-1].close:
-                        delta = self.bricks[-1].close - d
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            if self.high_wick == 0:
-                                self.add_bricks("down", fcount, gap)
-                            else:
-                                self.add_bricks("down", fcount, gap, self.high_wick)
-                            self.high_wick = 0
-                            self.low_wick = 0
-                            gap = d * self.percent / 100
-                        else:
-                            if self.low_wick == 0 or d < self.low_wick:
-                                self.low_wick = d
-                    elif d > self.bricks[-1].open:
-                        delta = d - self.bricks[-1].open
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            if self.low_wick == 0:
-                                self.add_bricks("up", fcount, gap)
-                            else:
-                                self.add_bricks("up", fcount, gap, self.low_wick)
-                            self.low_wick = 0
-                            self.high_wick = 0
-                            gap = d * self.percent / 100
-                        else:
-                            if d > self.high_wick:
-                                self.high_wick = d
+            for i, d in enumerate(self.data):
+                if i == 0:
+                    if len(self.bricks) == 0:
+                        self.bricks.append(Brick(type="first", open=float(d), close=float(d), high=float(d), low=float(d)))
                 else:
-                    if d > self.bricks[-1].close:
-                        delta = d - self.bricks[-1].close
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            self.add_bricks("up", fcount, gap)
-                            gap = d * self.percent / 100
-                    if d < self.bricks[-1].close:
-                        delta = self.bricks[-1].close - d
-                        fcount = math.floor(delta / gap)
-                        if fcount != 0:
-                            self.add_bricks("down", fcount, gap)
-                            gap = d * self.percent / 100
+                    if self.bricks[-1].type == "up":
+                        if d > self.bricks[-1].close:
+                            delta = d - self.bricks[-1].close
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                if self.low_wick == 0:
+                                    self.add_bricks("up", fcount, gap)
+                                else:
+                                    self.add_bricks("up", fcount, gap, self.low_wick)
+                                gap = d * self.percent / 100
+                                self.low_wick = 0
+                                self.high_wick = 0
+                            else:
+                                if d > self.high_wick:
+                                    self.high_wick = d
+                        elif d < self.bricks[-1].open:
+                            delta = self.bricks[-1].open - d
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                if self.high_wick == 0:
+                                    self.add_bricks("down", fcount, gap)
+                                else:
+                                    self.add_bricks("down", fcount, gap, self.high_wick)
+                                gap = d * self.percent / 100
+                                self.high_wick = 0
+                                self.low_wick = 0
+                            else:
+                                if self.low_wick == 0 or d < self.low_wick:
+                                    self.low_wick = d
+                    elif self.bricks[-1].type == "down":
+                        if d < self.bricks[-1].close:
+                            delta = self.bricks[-1].close - d
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                if self.high_wick == 0:
+                                    self.add_bricks("down", fcount, gap)
+                                else:
+                                    self.add_bricks("down", fcount, gap, self.high_wick)
+                                self.high_wick = 0
+                                self.low_wick = 0
+                                gap = d * self.percent / 100
+                            else:
+                                if self.low_wick == 0 or d < self.low_wick:
+                                    self.low_wick = d
+                        elif d > self.bricks[-1].open:
+                            delta = d - self.bricks[-1].open
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                if self.low_wick == 0:
+                                    self.add_bricks("up", fcount, gap)
+                                else:
+                                    self.add_bricks("up", fcount, gap, self.low_wick)
+                                self.low_wick = 0
+                                self.high_wick = 0
+                                gap = d * self.percent / 100
+                            else:
+                                if d > self.high_wick:
+                                    self.high_wick = d
+                    else:
+                        if d > self.bricks[-1].close:
+                            delta = d - self.bricks[-1].close
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                self.add_bricks("up", fcount, gap)
+                                gap = d * self.percent / 100
+                        if d < self.bricks[-1].close:
+                            delta = self.bricks[-1].close - d
+                            fcount = math.floor(delta / gap)
+                            if fcount != 0:
+                                self.add_bricks("down", fcount, gap)
+                                gap = d * self.percent / 100
 
-        pb_renko = PBRenko(
-            symbol=self.symbol,
-            bricks=self.bricks,
-            percent=self.percent,
-            number_of_leaks=self.number_of_leaks
-        )
-        return pb_renko
+            pb_renko = PBRenko(
+                symbol=self.symbol,
+                bricks=self.bricks,
+                percent=self.percent,
+                number_of_leaks=self.number_of_leaks
+            )
+            return ResponseSuccess(pb_renko)
+        except Exception as exc:
+            return ResponseFailure(ResponseTypes.SYSTEM_ERROR, exc)
 
 
     def add_bricks(self, type, count, brick_size, wick=0):

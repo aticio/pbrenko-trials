@@ -1,6 +1,3 @@
-from collections.abc import Mapping
-
-
 class PBRenkoCreateInvalidRequest:
     def __init__(self):
         self.errors = []

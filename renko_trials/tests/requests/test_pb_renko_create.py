@@ -1,4 +1,3 @@
-import pytest
 from renko_trials.requests.pb_renko_create import build_pb_renko_create_request
 
 
