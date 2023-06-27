@@ -76,7 +76,7 @@ def test_create(mock_use_case, client):
     mock_use_case.return_value = pb_renko
 
     http_response = client.get(
-        "/pb_renko_create?symbol=BTCUSDT&percent=6.3"
+        "/pb_renko_create?symbol=BTCUSDT&percent=6.3&repo=crypto"
     )
 
     assert json.loads(http_response.data.decode("UTF-8")) == init_dict
