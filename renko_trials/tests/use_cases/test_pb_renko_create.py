@@ -21,9 +21,8 @@ def test_pb_renko_create_with_parameters(market_data):
 
     request = build_pb_renko_create_request({"symbol": "BTCUSDT", "percent": percent, "repo": "crypto"})
 
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-    response = pb_renko_create_use_case.create_pbrenko(request)
-
+    pb_renko_create_use_case = PBRenkoCreateUseCase()
+    response = pb_renko_create_use_case.create_pbrenko(repo, request)
     brick_0 = Brick(
         type="first",
         open=100,
@@ -112,12 +111,12 @@ def test_pb_renko_create_with_parameters(market_data):
 
 def test_pb_renko_create_handles_generic_error():
     repo = mock.Mock()
-    repo.get_data.return_value = []
+    repo.get_data.side_effect = Exception("Just an error message")
 
     request = build_pb_renko_create_request({"symbol": "BTCUSDT", "percent": 10, "repo": "crypto"})
 
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-    response = pb_renko_create_use_case.create_pbrenko(request)
+    pb_renko_create_use_case = PBRenkoCreateUseCase()
+    response = pb_renko_create_use_case.create_pbrenko(repo, request)
 
     assert bool(response) is False
     assert response.value == {
@@ -131,8 +130,8 @@ def test_pb_renko_create_handles_bad_request():
 
     request = build_pb_renko_create_request(parameters=5)
 
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-    response = pb_renko_create_use_case.create_pbrenko(request)
+    pb_renko_create_use_case = PBRenkoCreateUseCase()
+    response = pb_renko_create_use_case.create_pbrenko(repo, request)
 
     assert bool(response) is False
     assert response.value == {

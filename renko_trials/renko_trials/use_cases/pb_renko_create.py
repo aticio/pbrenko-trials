@@ -11,23 +11,23 @@ from renko_trials.responses import (
 
 
 class PBRenkoCreateUseCase:
-    def __init__(self, repo):
-        self.data = repo.get_data()
+    def __init__(self):
+        self.data = []
         self.bricks = []
         self.low_wick = 0
         self.high_wick = 0
         self.number_of_leaks = 0
     
-    def create_pbrenko(self, request):
+    def create_pbrenko(self, repo, request):
         if not request:
             return build_response_from_invalid_request(request)
-        
         try:
+            self.data = repo.get_data()
+            self.symbol = request.parameters["symbol"]
+            self.percent = request.parameters["percent"]
             if len(self.data) == 0:
                 return []
 
-            self.symbol = request.parameters["symbol"]
-            self.percent = request.parameters["percent"]
             gap = float(self.data[0]) * self.percent / 100
 
             for i, d in enumerate(self.data):

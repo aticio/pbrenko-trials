@@ -5,6 +5,7 @@ from flask import Blueprint, request, Response
 from renko_trials.repository.memrepo import MemRepo
 from renko_trials.use_cases.pb_renko_create import PBRenkoCreateUseCase
 from renko_trials.serializers.pb_renko import PBRenkoJsonEncoder
+from renko_trials.requests.pb_renko_create import build_pb_renko_create_request
 
 
 blueprint = Blueprint("pb_renko_create", __name__)
@@ -16,8 +17,10 @@ market_data = [42373.73, 42217.87, 42053.66, 42535.94, 44544.86, 43873.56, 40515
 def pb_renko_create():
     if request.args.get("repo") == "crypto":
         repo = MemRepo(market_data)
-    pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
-    pb_renko = pb_renko_create_use_case.create_pbrenko(request.args.get("symbol"), float(request.args.get("percent")))
+
+    request_object = build_pb_renko_create_request({"symbol": request.args.get("symbol"), "percent": float(request.args.get("percent")), "repo": request.args.get("repo")})
+    pb_renko_create_use_case = PBRenkoCreateUseCase()
+    pb_renko = pb_renko_create_use_case.create_pbrenko(repo, request_object)
 
     return Response(
         json.dumps(pb_renko, cls=PBRenkoJsonEncoder),

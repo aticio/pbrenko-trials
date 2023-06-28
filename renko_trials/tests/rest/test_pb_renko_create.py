@@ -83,7 +83,8 @@ def test_create(mock_use_case, client):
 
     mock_use_case.assert_called()
     args, kwargs = mock_use_case.call_args
-    assert args[0] == "BTCUSDT"
-    assert args[1] == 6.3
+    print(args[1].parameters)
+    assert args[1].parameters["symbol"] == "BTCUSDT"
+    assert args[1].parameters["percent"] == 6.3
     assert http_response.status_code == 200
     assert http_response.mimetype == "application/json"

@@ -6,9 +6,9 @@ from decimal import Decimal, getcontext
 def find_optimum_percent(repo, symbol):
     found_percentages = []
     for i in (x / 10 for x in range(9, 101)):
-        pb_renko_create_use_case = PBRenkoCreateUseCase(repo)
+        pb_renko_create_use_case = PBRenkoCreateUseCase()
         request = build_pb_renko_create_request({"symbol": symbol, "percent": i, "repo": "crypto"})
-        response = pb_renko_create_use_case.create_pbrenko(request)
+        response = pb_renko_create_use_case.create_pbrenko(repo, request)
         pb_renko = response.value
 
         if pb_renko.number_of_leaks == 0:
