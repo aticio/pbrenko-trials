@@ -138,3 +138,17 @@ def test_pb_renko_create_handles_bad_request():
         "type": ResponseTypes.PARAMETERS_ERROR,
         "message": "parameters: Is not iterable",
     }
+
+
+def test_pb_renko_create_missing_parameter():
+    repo = mock.Mock()
+    repo.get_data.return_value = market_data
+
+    request = build_pb_renko_create_request({"symbol": "BTCUSDT", "repo": "crypto"})
+    pb_renko_create_use_case = PBRenkoCreateUseCase()
+    response = pb_renko_create_use_case.create_pbrenko(repo, request)
+    assert bool(response) is False
+    assert response.value == {
+        "type": ResponseTypes.PARAMETERS_ERROR,
+        "message": "parameters: missing parameter",
+    }

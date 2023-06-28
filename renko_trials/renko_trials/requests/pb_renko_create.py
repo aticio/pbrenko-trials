@@ -30,7 +30,7 @@ def build_pb_renko_create_request(parameters=None):
             return invalid_req
 
         if len(parameters) != 3:
-            invalid_req.add_error("parameters", "Wrong number of parameters")
+            invalid_req.add_error("parameters", "missing parameter")
             for key, value in parameters.items():
                 if key not in accepted_parameters:
                     invalid_req.add_error("parameters", "Key {} cannot be used".format(key))

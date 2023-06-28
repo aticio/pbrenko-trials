@@ -3,9 +3,7 @@ from unittest import mock
 
 from renko_trials.domain.pb_renko import PBRenko
 from renko_trials.responses import (
-    ResponseFailure,
     ResponseSuccess,
-    ResponseTypes
 )
 
 
