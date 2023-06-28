@@ -2,6 +2,11 @@ import json
 from unittest import mock
 
 from renko_trials.domain.pb_renko import PBRenko
+from renko_trials.responses import (
+    ResponseFailure,
+    ResponseSuccess,
+    ResponseTypes
+)
 
 
 init_dict = {
@@ -73,7 +78,7 @@ pb_renko = PBRenko.from_dict(init_dict)
 
 @mock.patch("application.rest.pb_renko_create.PBRenkoCreateUseCase.create_pbrenko")
 def test_create(mock_use_case, client):
-    mock_use_case.return_value = pb_renko
+    mock_use_case.return_value = ResponseSuccess(pb_renko)
 
     http_response = client.get(
         "/pb_renko_create?symbol=BTCUSDT&percent=6.3&repo=crypto"
@@ -83,7 +88,6 @@ def test_create(mock_use_case, client):
 
     mock_use_case.assert_called()
     args, kwargs = mock_use_case.call_args
-    print(args[1].parameters)
     assert args[1].parameters["symbol"] == "BTCUSDT"
     assert args[1].parameters["percent"] == 6.3
     assert http_response.status_code == 200

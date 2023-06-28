@@ -119,14 +119,6 @@ class PBRenkoCreateUseCase:
 
 
     def add_bricks(self, type, count, brick_size, wick=0):
-        """Adds brick(s) to the bricks list
-        :param type: type of brick (up or down)
-        :type type: string
-        :param count: number of bricks to add
-        :type count: int
-        :param brick_size: brick size
-        :type brick_size: float
-        """
         if type != self.bricks[-1].type and count > 1:
             self.number_of_leaks = self.number_of_leaks + 1 
         for i in range(count):
