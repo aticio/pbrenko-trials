@@ -33,5 +33,5 @@ def pb_renko_create():
     return Response(
         json.dumps(response.value, cls=PBRenkoJsonEncoder),
         mimetype="application/json",
-        status=200,
+        status=STATUS_CODES[response.type],
     )
