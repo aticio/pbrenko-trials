@@ -1,4 +1,4 @@
-class PBRenkoCreateInvalidRequest:
+class SingleAnalysisCreateInvalidRequest:
     def __init__(self):
         self.errors = []
 
@@ -12,7 +12,7 @@ class PBRenkoCreateInvalidRequest:
         return False
 
 
-class PBRenkoCreateValidRequest:
+class SingleAnalysisCreateValidRequest:
     def __init__(self, parameters=None):
         self.parameters = parameters
 
@@ -20,28 +20,25 @@ class PBRenkoCreateValidRequest:
         return True
 
 
-def build_pb_renko_create_request(parameters=None):
-    accepted_parameters = ["symbol", "percent", "repo"]
-    invalid_req = PBRenkoCreateInvalidRequest()
+def build_single_analysis_request(parameters=None):
+    accepted_parameters = ["symbol", "percent", "repo", "start_date", "end_date"]
+    invalid_req = SingleAnalysisCreateInvalidRequest()
 
     if parameters is not None:
         if not isinstance(parameters, dict):
             invalid_req.add_error("parameters", "Is not iterable")
             return invalid_req
 
-        if len(parameters) != 3:
+        if len(parameters) != 5:
             invalid_req.add_error("parameters", "missing parameter")
             return invalid_req
 
         for key, value in parameters.items():
             if key not in accepted_parameters:
-                invalid_req.add_error("parameters", "Key {} cannot be used".format(key))
+                invalid_req.add_error(key, "Key {} cannot be used".format(key))
                 return invalid_req
-
-        if invalid_req.has_errors():
-            return invalid_req
     else:
-        invalid_req.add_error("parameters", "Needs 3 parameters, got 0")
+        invalid_req.add_error("", "Need 5 parameters, got 0")
         return invalid_req
 
-    return PBRenkoCreateValidRequest(parameters=parameters)
+    return SingleAnalysisCreateValidRequest(parameters=parameters)
